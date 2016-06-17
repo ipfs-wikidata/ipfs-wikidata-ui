@@ -1,0 +1,12 @@
+.wikidata {
+  font-weight: bold;
+}
+
+.wikidata--green {
+  composes: wikidata;
+  color: rgb(25,200,25);
+}
+
+.wikidataContainer {
+  margin: 1em auto;
+}
