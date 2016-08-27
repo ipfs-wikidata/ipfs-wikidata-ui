@@ -1,5 +1,7 @@
 import { connect } from 'react-redux'
-import { fetchEntity } from '../modules/wikidata'
+import { bindActionCreators } from 'redux'
+import { createSelector } from 'reselect'
+import { fetchEntity, handleLanguageChanged } from '../modules/wikidata'
 
 /*  This is a container component. Notice it does not contain any JSX,
     nor does it import React. This component is **only** responsible for
@@ -13,15 +15,15 @@ import Wikidata from 'components/Wikidata'
     implementing our wrapper around increment; the component doesn't care   */
 
 const mapActionCreators = {
-  // increment: () => increment(1),
-  // doubleAsync
-
-  // fetchEntity
-  fetchEntity: () => fetchEntity('Q42')
+  fetchEntity,
+  handleLanguageChanged
 }
 
+
 const mapStateToProps = (state) => ({
-  entities: state.wikidata.entities
+  current: state.wikidata.current,
+  entities: getLocalizedEntities(state)
+  // entities: state.wikidata.entities
   // wikidata: state.wikidata
 })
 
@@ -40,3 +42,27 @@ const mapStateToProps = (state) => ({
     https://github.com/reactjs/reselect    */
 
 export default connect(mapStateToProps, mapActionCreators)(Wikidata)
+
+
+export const getLocalizedEntities = createSelector(
+  [
+    state => state.wikidata.ui_language,
+    state => state.wikidata.entities,
+  ],
+  (language, org_entities) => {
+    var entities = {};
+    for(var entity_id in org_entities) {
+      var org_entity = org_entities[entity_id];
+      var entity = Object.assign({}, org_entity);
+
+      console.log(language);
+      entity.labels = undefined;
+      entity.label = org_entity['labels'][language]['value'];
+
+      entities[entity_id] = entity;
+      console.log(entity);
+    }
+
+    return entities;
+  }
+)

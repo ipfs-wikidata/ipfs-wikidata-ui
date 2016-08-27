@@ -1,9 +1,11 @@
+var update = require('react-addons-update');
 // ------------------------------------
 // Constants
 // ------------------------------------
 export const REQUEST_ENTITY = 'REQUEST_ENTITY'
 export const RECEIVE_ENTITY = 'RECEIVE_ENTITY'
 
+export const UPDATE_LANGUAGE = 'UPDATE_LANGUAGE'
 // ------------------------------------
 // Actions
 // ------------------------------------
@@ -17,12 +19,21 @@ export function requestEntity (id: string) {
   }
 }
 
-export function receiveEntity (id: string, text: string) {
+export function receiveEntity (id: string, json: string) {
   return {
     type: RECEIVE_ENTITY,
     payload: {
       id,
-      text
+      json
+    }
+  }
+}
+
+export function updateLanguage (id: string) {
+  return {
+    type: UPDATE_LANGUAGE,
+    payload: {
+      id,
     }
   }
 }
@@ -39,10 +50,19 @@ export const fetchEntity = (id: string): Function => {
   return (dispatch: Function): Promise => {
     dispatch(requestEntity(id))
 
-    // return fetch('https://api.github.com/zen')
-    return fetch('http://localhost:8080/ipfs/QmU6xMi7EY7ah82Y82wqJwD1Poh3Gf7dux1YzsniMVrJDu/' + id + '.json')
+    // some old root Qmd2JShnowEtYQyS2o1Zk8ke4hw1YjsYdCm1G6Pa67UknP
+    // current root Qmccat9rJ33pom4NdHWkoN41vgDahXQBWpm87rMvuGi6Wo
+
+    // return fetch('http://localhost:8080/ipfs/Qmccat9rJ33pom4NdHWkoN41vgDahXQBWpm87rMvuGi6Wo/' + id + '.json')
+    return fetch('http://gateway.ipfs.io/ipfs/Qmccat9rJ33pom4NdHWkoN41vgDahXQBWpm87rMvuGi6Wo/' + id + '.json')
       .then(data => data.json())
       .then(text => dispatch(receiveEntity(id, text)))
+  }
+}
+
+export const handleLanguageChanged = (event) => {
+  return (dispatch: Function) => {
+    dispatch(updateLanguage(event.target.value))
   }
 }
 
@@ -51,7 +71,8 @@ export const actions = {
   // doubleAsync
   requestEntity,
   receiveEntity,
-  fetchEntity
+  fetchEntity,
+  handleLanguageChanged
 }
 
 // ------------------------------------
@@ -62,7 +83,14 @@ const ACTION_HANDLERS = {
     return ({ ...state, fetching: true })
   },
   [RECEIVE_ENTITY]: (state, action) => {
-    return ({ ...state, entities: state.entities.concat(action.payload), current: action.payload.id, fetching: false })
+    let entity = {};
+    entity[action.payload.json.id] = action.payload.json;
+    var new_entities = update(state.entities, {$merge: entity});
+    return ({ ...state, entities: new_entities, current: action.payload.id, fetching: false })
+  },
+  [UPDATE_LANGUAGE]: (state, action) => {
+    console.log(action);
+    return ({ ...state, ui_language: action.payload.id })
   }
 }
 
@@ -71,7 +99,8 @@ const ACTION_HANDLERS = {
 // ------------------------------------
 const initialState = {
   fetching: false,
-  entities: []
+  ui_language: 'en-gb',
+  entities: {}
 }
 export default function wikidataReducer (state = initialState, action) {
   const handler = ACTION_HANDLERS[action.type]
