@@ -1,54 +1,82 @@
 import React from 'react'
-import classes from './Wikidata.scss'
 
-export const Wikidata = (props) => (
-  <div>
-    <h2 className={classes.wikidataContainer}>
-      Wikidata:
-      {' '}
-      <span className={classes['wikidata--green']}>
-        {props.wikidata}
-      </span>
-    </h2>
-    <select onChange={props.handleLanguageChanged.bind()}>
-      <option value="en-gb">British English</option>
-      <option value="de">German</option>
-    </select>
-    <br/>
-    <br/>
-    <button className='btn btn-default' onClick={props.fetchEntity.bind(this, 'Q42')}>
-      Douglas Adams
-    </button>
-    {' '}
-    <button className='btn btn-default' onClick={props.fetchEntity.bind(this, 'Q43')}>
-      Turkey
-    </button>
-    <p>
-      Label: {(props.entities[props.current] || { label: "-"} ).label}.
-    </p>
-    <p>Statements:</p>
-    {
-      ((props.entities[props.current]) ?
-        (Object.values(props.entities[props.current].claims).map((claim) => (
-          <div style = {{
-            "border-style": "solid",
-            "border-color": "#4FC3F7"
-          }} >
-            <p>Property <small>({(claim[0].mainsnak.property)})</small></p>
-          </div>
-        )))
-        : 'No claims'
-      )
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import SelectField from 'material-ui/SelectField';
+import MenuItem from 'material-ui/MenuItem';
+import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
+import LinearProgress from 'material-ui/LinearProgress';
+
+import classes from './Wikidata.scss'
+import Claim from './Claim'
+
+export class Wikidata extends React.Component {
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.current !== this.props.current) {
+      for (var unfetched of nextProps.unfetched_entities) {
+        this.props.fetchEntity(unfetched)
+      }
     }
-  </div>
-)
+  }
+
+  render() {
+    return (
+      <MuiThemeProvider>
+      <div style={{
+        "maxWidth": "70%",
+        "margin": "auto"
+      }}>
+        <h2 className={classes.wikidataContainer}>
+          Wikidata:
+          {' '}
+          <span className={classes['wikidata--green']}>
+            {this.props.wikidata}
+          </span>
+        </h2>
+        <SelectField value={this.props.language} onChange={this.props.handleLanguageChanged.bind()}>
+          <MenuItem value="en-gb" primaryText="British English" />
+          <MenuItem value="de" primaryText="German" />
+        </SelectField>
+        <br/>
+        <br/>
+        <button className='btn btn-default' onClick={this.props.fetchCurrent.bind(this, 'Q42')}>
+          Douglas Adams
+        </button>
+        {' '}
+        <button className='btn btn-default' onClick={this.props.fetchCurrent.bind(this, 'Q43')}>
+          Turkey
+        </button>
+        <Card>
+          <CardTitle title={(this.props.entities[this.props.current] || { label: "-"} ).label} subtitle={"Item - " + (this.props.current || "?")} />
+          {/* TODO: show item description */}
+          <CardText>
+        {
+          ((this.props.entities[this.props.current]) ?
+            (Object.values(this.props.entities[this.props.current].claims).map((claims) => (
+              <Claim claims={claims} entities={(this.props.entities)} entity_fetch_states={(this.props.entity_fetch_states)} />
+            )))
+            : 'No claims'
+          )
+        }
+          </CardText>
+        </Card>
+      </div>
+      </MuiThemeProvider>
+    );
+  }
+}
 
 Wikidata.propTypes = {
+  language: React.PropTypes.string,
+
   current: React.PropTypes.string,
   entities: React.PropTypes.object.isRequired,
+  entity_fetch_states: React.PropTypes.object.isRequired,
 
   fetchEntity: React.PropTypes.func.isRequired,
-  handleLanguageChanged: React.PropTypes.func.isRequired
+  fetchCurrent: React.PropTypes.func.isRequired,
+  handleLanguageChanged: React.PropTypes.func.isRequired,
+
+  unfetched_entities: React.PropTypes.array,
 }
 
 export default Wikidata
