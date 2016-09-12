@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { createSelector } from 'reselect'
-import { fetchEntity, fetchCurrent, handleLanguageChanged } from '../modules/wikidata'
+import { fetchEntity, fetchCurrent, handleLanguageChanged, handleSaveSettings } from '../modules/wikidata'
 import { entitiesInItem } from '../modules/wikidata'
 
 /*  This is a container component. Notice it does not contain any JSX,
@@ -18,7 +18,8 @@ import Wikidata from 'components/Wikidata'
 const mapActionCreators = {
   fetchEntity,
   fetchCurrent,
-  handleLanguageChanged
+  handleLanguageChanged,
+  handleSaveSettings,
 }
 
 

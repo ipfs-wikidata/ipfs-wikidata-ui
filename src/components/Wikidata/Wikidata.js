@@ -1,12 +1,12 @@
 import React from 'react'
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import SelectField from 'material-ui/SelectField';
-import MenuItem from 'material-ui/MenuItem';
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 import LinearProgress from 'material-ui/LinearProgress';
 
 import classes from './Wikidata.scss'
+
+import Header from '../Header/Header'
 import Claim from './Claim'
 
 export class Wikidata extends React.Component {
@@ -20,6 +20,14 @@ export class Wikidata extends React.Component {
 
   render() {
     return (
+      <div>
+      <MuiThemeProvider>
+        <Header
+          settings={this.props.settings}
+          handleSaveSettings={this.props.handleSaveSettings}
+        />
+      </MuiThemeProvider>
+
       <MuiThemeProvider>
       <div style={{
         "maxWidth": "70%",
@@ -32,10 +40,6 @@ export class Wikidata extends React.Component {
             {this.props.wikidata}
           </span>
         </h2>
-        <SelectField value={this.props.language} onChange={this.props.handleLanguageChanged.bind()}>
-          <MenuItem value="en-gb" primaryText="British English" />
-          <MenuItem value="de" primaryText="German" />
-        </SelectField>
         <br/>
         <br/>
         <button className='btn btn-default' onClick={this.props.fetchCurrent.bind(this, 'Q42', this.props.settings.ipfs_gateway, this.props.settings.root_hash)}>
@@ -61,6 +65,7 @@ export class Wikidata extends React.Component {
         </Card>
       </div>
       </MuiThemeProvider>
+      </div>
     );
   }
 }
@@ -76,6 +81,7 @@ Wikidata.propTypes = {
   fetchEntity: React.PropTypes.func.isRequired,
   fetchCurrent: React.PropTypes.func.isRequired,
   handleLanguageChanged: React.PropTypes.func.isRequired,
+  handleSaveSettings: React.PropTypes.func.isRequired,
 
   unfetched_entities: React.PropTypes.array,
 }

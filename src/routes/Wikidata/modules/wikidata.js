@@ -9,6 +9,8 @@ export const REQUEST_CURRENT = 'REQUEST_CURRENT'
 export const RECEIVE_CURRENT = 'RECEIVE_CURRENT'
 
 export const UPDATE_LANGUAGE = 'UPDATE_LANGUAGE'
+export const UPDATE_IPFS_GATEWAY = 'UPDATE_IPFS_GATEWAY'
+export const UPDATE_ROOT_HASH = 'UPDATE_ROOT_HASH'
 
 const FETCH_STATE_FETCHING = 'FETCHING';
 const FETCH_STATE_DONE = 'DONE';
@@ -75,6 +77,24 @@ export function updateLanguage (id: string) {
   }
 }
 
+export function updateIPFSGateway (ipfs_gateway: string) {
+  return {
+    type: UPDATE_IPFS_GATEWAY,
+    payload: {
+      ipfs_gateway,
+    }
+  }
+}
+
+export function updateRootHash (root_hash: string) {
+  return {
+    type: UPDATE_ROOT_HASH,
+    payload: {
+      root_hash,
+    }
+  }
+}
+
 function idPath(id: string): string {
   let parts = id.match(/.{1,3}/g);
   let path = parts.join('/');
@@ -135,6 +155,15 @@ export const handleLanguageChanged = (_event, _key, payload) => {
   }
 }
 
+export const handleSaveSettings = (settings) => {
+  return (dispatch: Function) => {
+    console.log(settings);
+    dispatch(updateLanguage(settings.ui_language))
+    dispatch(updateIPFSGateway(settings.ipfs_gateway))
+    dispatch(updateRootHash(settings.root_hash))
+  }
+}
+
 export const actions = {
   requestEntity,
   receiveEntity,
@@ -143,7 +172,8 @@ export const actions = {
   requestCurrent,
   receiveCurrent,
   fetchCurrent,
-  handleLanguageChanged
+  handleLanguageChanged,
+  handleSaveSettings,
 }
 
 // ------------------------------------
@@ -210,7 +240,17 @@ const ACTION_HANDLERS = {
     console.log(action);
     let settings = update(state.settings, {$merge: { ui_language: action.payload.id }});
     return ({ ...state, settings: settings })
-  }
+  },
+  [UPDATE_IPFS_GATEWAY]: (state, action) => {
+    console.log(action);
+    let settings = update(state.settings, {$merge: { ipfs_gateway: action.payload.ipfs_gateway }});
+    return ({ ...state, settings: settings })
+  },
+  [UPDATE_ROOT_HASH]: (state, action) => {
+    console.log(action);
+    let settings = update(state.settings, {$merge: { root_hash: action.payload.root_hash }});
+    return ({ ...state, settings: settings })
+  },
 }
 
 // ------------------------------------

@@ -10,7 +10,7 @@ export const createRoutes = (store) => ({
   component: CoreLayout,
   indexRoute: WikidataRoute(store),
   childRoutes: [
-    // WikidataRoute(store)
+    // HeaderRoute(store)
   ]
 })
 
