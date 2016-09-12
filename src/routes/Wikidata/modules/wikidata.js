@@ -14,13 +14,6 @@ const FETCH_STATE_FETCHING = 'FETCHING';
 const FETCH_STATE_DONE = 'DONE';
 const FETCH_STATE_ERROR = 'ERROR';
 
-// TODO: get local to work 'http://localhost:8080'
-// const IPFS_DAEMON = 'http://gateway.ipfs.io'
-const IPFS_DAEMON = 'http://127.0.0.1:8080'
-// some old root Qmd2JShnowEtYQyS2o1Zk8ke4hw1YjsYdCm1G6Pa67UknP
-// current root Qmccat9rJ33pom4NdHWkoN41vgDahXQBWpm87rMvuGi6Wo
-const ROOT_PATH = '/ipfs/Qmccat9rJ33pom4NdHWkoN41vgDahXQBWpm87rMvuGi6Wo/'
-
 // ------------------------------------
 // Actions
 // ------------------------------------
@@ -109,11 +102,11 @@ export const entitiesInItem = (item) => {
     return contained_entities;
 }
 
-export const fetchEntity = (id: string): Function => {
+export const fetchEntity = (id: string, ipfs_gateway: string, root_hash: string): Function => {
   return (dispatch: Function): Promise => {
     dispatch(requestEntity(id))
 
-    return fetch(IPFS_DAEMON + ROOT_PATH + idPath(id) + '.json')
+    return fetch(ipfs_gateway + root_hash + idPath(id) + '.json')
       .then(response => {
         if (!response.ok) {
             throw Error(response.statusText);
@@ -125,11 +118,11 @@ export const fetchEntity = (id: string): Function => {
   }
 }
 
-export const fetchCurrent = (id: string): Function => {
+export const fetchCurrent = (id: string, ipfs_gateway: string, root_hash: string): Function => {
   return (dispatch: Function): Promise => {
     dispatch(requestCurrent(id))
 
-    return fetch(IPFS_DAEMON + ROOT_PATH + idPath(id) + '.json')
+    return fetch(ipfs_gateway + root_hash + idPath(id) + '.json')
       .then(data => data.json())
       .then(text => dispatch(receiveCurrent(id, text)))
   }
@@ -215,7 +208,8 @@ const ACTION_HANDLERS = {
   },
   [UPDATE_LANGUAGE]: (state, action) => {
     console.log(action);
-    return ({ ...state, ui_language: action.payload.id })
+    let settings = update(state.settings, {$merge: { ui_language: action.payload.id }});
+    return ({ ...state, settings: settings })
   }
 }
 
@@ -223,7 +217,15 @@ const ACTION_HANDLERS = {
 // Reducer
 // ------------------------------------
 const initialState = {
-  ui_language: 'en-gb',
+  settings: {
+    // TODO: get local to work 'http://localhost:8080'
+    // ipfs_gateway: 'http://gateway.ipfs.io',
+    ipfs_gateway: 'http://127.0.0.1:8080',
+    // some old root Qmd2JShnowEtYQyS2o1Zk8ke4hw1YjsYdCm1G6Pa67UknP
+    // current root Qmccat9rJ33pom4NdHWkoN41vgDahXQBWpm87rMvuGi6Wo
+    root_hash: '/ipfs/Qmccat9rJ33pom4NdHWkoN41vgDahXQBWpm87rMvuGi6Wo/',
+    ui_language: 'en-gb',
+  },
 
   current: null,
   fetching: false,

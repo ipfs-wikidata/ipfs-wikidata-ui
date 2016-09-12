@@ -23,6 +23,8 @@ const mapActionCreators = {
 
 
 const mapStateToProps = (state) => ({
+  settings: state.wikidata.settings,
+
   current: state.wikidata.current,
 
   entities: getContainedEntities(state),
@@ -50,7 +52,7 @@ export default connect(mapStateToProps, mapActionCreators)(Wikidata)
 
 export const getLocalizedEntities = createSelector(
   [
-    state => state.wikidata.ui_language,
+    state => state.wikidata.settings.ui_language,
     state => state.wikidata.entities,
   ],
   (language, org_entities) => {

@@ -13,7 +13,7 @@ export class Wikidata extends React.Component {
   componentWillReceiveProps(nextProps) {
     if (nextProps.current !== this.props.current) {
       for (var unfetched of nextProps.unfetched_entities) {
-        this.props.fetchEntity(unfetched)
+        this.props.fetchEntity(unfetched, this.props.settings.ipfs_gateway, this.props.settings.root_hash)
       }
     }
   }
@@ -38,11 +38,11 @@ export class Wikidata extends React.Component {
         </SelectField>
         <br/>
         <br/>
-        <button className='btn btn-default' onClick={this.props.fetchCurrent.bind(this, 'Q42')}>
+        <button className='btn btn-default' onClick={this.props.fetchCurrent.bind(this, 'Q42', this.props.settings.ipfs_gateway, this.props.settings.root_hash)}>
           Douglas Adams
         </button>
         {' '}
-        <button className='btn btn-default' onClick={this.props.fetchCurrent.bind(this, 'Q43')}>
+        <button className='btn btn-default' onClick={this.props.fetchCurrent.bind(this, 'Q43', this.props.settings.ipfs_gateway, this.props.settings.root_hash)}>
           Turkey
         </button>
         <Card>
@@ -67,6 +67,7 @@ export class Wikidata extends React.Component {
 
 Wikidata.propTypes = {
   language: React.PropTypes.string,
+  settings: React.PropTypes.object.isRequired,
 
   current: React.PropTypes.string,
   entities: React.PropTypes.object.isRequired,
