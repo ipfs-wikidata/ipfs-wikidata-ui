@@ -8,7 +8,7 @@ import LinearProgress from 'material-ui/LinearProgress';
 
 // import classes from './Claim.scss'
 
-export class Claim extends React.Component {
+class Claim extends React.Component {
   render() {
     const entities = this.props.entities;
     const main_property = this.props.claims[0].mainsnak.property;
