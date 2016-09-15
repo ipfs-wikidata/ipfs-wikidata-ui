@@ -5,6 +5,8 @@ import MonolingualTextSnak from './Snak/MonolingualTextSnak'
 import StringSnak from './Snak/StringSnak'
 import UrlSnak from './Snak/UrlSnak'
 
+import UnsupportedSnak from './Snak/UnsupportedSnak'
+
 class Snak extends React.Component {
   render() {
     switch(this.props.snak.datatype) {
@@ -30,10 +32,9 @@ class Snak extends React.Component {
           break;
         default:
           return (
-            <div>
-              Unsupported datatype.
-            </div>
+            <UnsupportedSnak />
           );
+          break;
           break;
     }
   }
