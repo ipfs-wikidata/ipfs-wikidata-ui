@@ -3,6 +3,7 @@ import React from 'react'
 import ExternalIdSnak from './Snak/ExternalIdSnak'
 import MonolingualTextSnak from './Snak/MonolingualTextSnak'
 import StringSnak from './Snak/StringSnak'
+import UrlSnak from './Snak/UrlSnak'
 
 class Snak extends React.Component {
   render() {
@@ -20,6 +21,11 @@ class Snak extends React.Component {
         case "string":
           return (
             <StringSnak snak={this.props.snak} />
+          );
+          break;
+        case "url":
+          return (
+            <UrlSnak snak={this.props.snak} />
           );
           break;
         default:
