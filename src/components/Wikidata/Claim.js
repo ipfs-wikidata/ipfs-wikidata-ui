@@ -1,17 +1,17 @@
 import React from 'react'
 
-// import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 import LinearProgress from 'material-ui/LinearProgress';
 
-// import classes from './Claim.scss'
+import Snak from './Snak'
 
 class Claim extends React.Component {
   render() {
     const entities = this.props.entities;
-    const main_property = this.props.claims[0].mainsnak.property;
+    const mainsnak = this.props.claims[0].mainsnak;
+    const main_property = mainsnak.property;
 
     const main_property_fetch_state = this.props.entity_fetch_states[main_property];
     const main_property_fetching = (main_property_fetch_state === 'FETCHING');
@@ -37,7 +37,7 @@ class Claim extends React.Component {
                     'Loading...' :
                    main_property_error ?
                     '---' :
-                    'TODO: show some claim information' )
+                    <Snak snak={mainsnak} /> )
               }
             </label>
         </CardText>

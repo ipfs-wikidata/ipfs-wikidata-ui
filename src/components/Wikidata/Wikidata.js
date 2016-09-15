@@ -50,8 +50,7 @@ export class Wikidata extends React.Component {
           Turkey
         </button>
         <Card>
-          <CardTitle title={(this.props.entities[this.props.current] || { label: "-"} ).label} subtitle={"Item - " + (this.props.current || "?")} />
-          {/* TODO: show item description */}
+          <CardTitle title={(this.props.entities[this.props.current] || { label: "-"} ).label + " - " + (this.props.entities[this.props.current] || { label: "-"} ).description} subtitle={"Item - " + (this.props.current || "?")} />
           <CardText>
         {
           ((this.props.entities[this.props.current]) ?

@@ -65,6 +65,9 @@ export const getLocalizedEntities = createSelector(
       entity.labels = undefined;
       entity.label = (org_entity['labels'][language] || { value: '<No translation availabe>' })['value'];
 
+      entity.descriptions = undefined;
+      entity.description = (org_entity['descriptions'][language] || { value: '<No translation availabe>' })['value'];
+
       entities[entity_id] = entity;
     }
 

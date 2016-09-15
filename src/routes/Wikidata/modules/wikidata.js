@@ -261,9 +261,10 @@ const initialState = {
     // TODO: get local to work 'http://localhost:8080'
     // ipfs_gateway: 'http://gateway.ipfs.io',
     ipfs_gateway: 'http://127.0.0.1:8080',
-    // some old root Qmd2JShnowEtYQyS2o1Zk8ke4hw1YjsYdCm1G6Pa67UknP
-    // current root Qmccat9rJ33pom4NdHWkoN41vgDahXQBWpm87rMvuGi6Wo
-    root_hash: '/ipfs/Qmccat9rJ33pom4NdHWkoN41vgDahXQBWpm87rMvuGi6Wo/',
+    // some old root - Qmd2JShnowEtYQyS2o1Zk8ke4hw1YjsYdCm1G6Pa67UknP
+    // another root - Qmccat9rJ33pom4NdHWkoN41vgDahXQBWpm87rMvuGi6Wo
+    // first full publish - Qmb1jRd81gfkmWWE4sjnvbEd4bJrj6bqrXecg6vx7fyvKG
+    root_hash: '/ipfs/Qmb1jRd81gfkmWWE4sjnvbEd4bJrj6bqrXecg6vx7fyvKG/',
     ui_language: 'en-gb',
   },
 
