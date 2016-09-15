@@ -10,7 +10,7 @@ import Snak from './Snak'
 class Claim extends React.Component {
   render() {
     const entities = this.props.entities;
-    const mainsnak = this.props.claims[0].mainsnak;
+    const mainsnak = this.props.claim.mainsnak;
     const main_property = mainsnak.property;
 
     const main_property_fetch_state = this.props.entity_fetch_states[main_property];
@@ -18,36 +18,13 @@ class Claim extends React.Component {
     const main_property_error = (main_property_fetch_state === 'ERROR');
 
     return (
-      <Card>
-        <CardTitle
-          title={(main_property_fetching ?
-                    'Loading...' :
-                  main_property_error ?
-                    'Error while fetching :(' :
-                    entities[main_property].label)}
-          subtitle={"Property - " + (main_property)} />
-        {
-          (( main_property_fetching ) ?
-            <LinearProgress mode="indeterminate" /> : '' )
-        }
-        <CardText>
-            <label style={{color: '#C3C3C3'}}>
-              {
-                (( main_property_fetching ) ?
-                    'Loading...' :
-                   main_property_error ?
-                    '---' :
-                    <Snak snak={mainsnak} /> )
-              }
-            </label>
-        </CardText>
-      </Card>
+      <Snak snak={mainsnak} />
     );
   }
 }
 
 Claim.propTypes = {
-  claims: React.PropTypes.array.isRequired,
+  claim: React.PropTypes.object.isRequired,
 
   entities: React.PropTypes.object.isRequired,
   entity_fetch_states: React.PropTypes.object.isRequired,

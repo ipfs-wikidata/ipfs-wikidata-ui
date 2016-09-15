@@ -7,7 +7,7 @@ import LinearProgress from 'material-ui/LinearProgress';
 import classes from './Wikidata.scss'
 
 import Header from '../Header/Header'
-import Claim from './Claim'
+import Claims from './Claims'
 
 export class Wikidata extends React.Component {
   componentWillReceiveProps(nextProps) {
@@ -55,7 +55,7 @@ export class Wikidata extends React.Component {
         {
           ((this.props.entities[this.props.current]) ?
             (Object.values(this.props.entities[this.props.current].claims).map((claims) => (
-              <Claim claims={claims} entities={(this.props.entities)} entity_fetch_states={(this.props.entity_fetch_states)} />
+              <Claims claims={claims} entities={(this.props.entities)} entity_fetch_states={(this.props.entity_fetch_states)} />
             )))
             : 'No claims'
           )
