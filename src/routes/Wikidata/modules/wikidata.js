@@ -115,9 +115,32 @@ function filterUnfetched(unfetched_entities, fetch_states) {
 
 export const entitiesInItem = (item) => {
     if (!item) { return []; }
-    console.log(item);
     let contained_entities = [];
     contained_entities = contained_entities.concat(Object.keys(item.claims));
+    contained_entities = contained_entities.concat(entitiesInClaims(item.claims));
+
+    return contained_entities;
+}
+
+export const entitiesInClaims = (claims) => {
+    if (!claims) { return []; }
+    let contained_entities = [];
+
+    // console.log(Object.values(claims));
+    // Object.values(claims).foreach((claim) => {
+    //   console.log(claim);
+    // })
+
+    for (var claimValues of Object.values(claims)) {
+      for (var claim of claimValues) {
+        if (claim.mainsnak.datatype === "wikibase-item") {
+          var entity = "Q" + claim.mainsnak.datavalue.value["numeric-id"];
+          contained_entities.push(entity);
+        }
+      }
+    }
+
+    // TODO: add entities in references
 
     return contained_entities;
 }

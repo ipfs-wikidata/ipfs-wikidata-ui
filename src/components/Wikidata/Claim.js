@@ -9,16 +9,10 @@ import Snak from './Snak'
 
 class Claim extends React.Component {
   render() {
-    const entities = this.props.entities;
     const mainsnak = this.props.claim.mainsnak;
-    const main_property = mainsnak.property;
-
-    const main_property_fetch_state = this.props.entity_fetch_states[main_property];
-    const main_property_fetching = (main_property_fetch_state === 'FETCHING');
-    const main_property_error = (main_property_fetch_state === 'ERROR');
 
     return (
-      <Snak snak={mainsnak} />
+      <Snak snak={mainsnak} entities={this.props.entities} />
     );
   }
 }
