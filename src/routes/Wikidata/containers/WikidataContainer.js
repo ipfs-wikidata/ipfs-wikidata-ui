@@ -75,14 +75,35 @@ export const getLocalizedEntities = createSelector(
   }
 )
 
-export const getContainedEntities = createSelector(
+export const getCurrentEntity = createSelector(
   [
     state => state.wikidata.current,
-    getLocalizedEntities,
+    state => state.wikidata.entities,
   ],
   (current, org_entities) => {
-    var contained_entities = entitiesInItem(org_entities[current]);
-    contained_entities.push(current);
+    return org_entities[current];
+  }
+)
+
+export const getEntitiesInCurrent = createSelector(
+  [
+    state => state.wikidata.current,
+    getCurrentEntity,
+  ],
+  (current_id, currentEntity) => {
+    var contained_entities = entitiesInItem(currentEntity);
+    contained_entities.push(current_id);
+
+    return contained_entities;
+  }
+)
+
+export const getContainedEntities = createSelector(
+  [
+    getEntitiesInCurrent,
+    getLocalizedEntities,
+  ],
+  (contained_entities, org_entities) => {
     var entities = {};
     for(var entity_id in org_entities) {
       if (contained_entities.includes(entity_id)) {

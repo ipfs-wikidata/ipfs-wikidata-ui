@@ -126,11 +126,6 @@ export const entitiesInClaims = (claims) => {
     if (!claims) { return []; }
     let contained_entities = [];
 
-    // console.log(Object.values(claims));
-    // Object.values(claims).foreach((claim) => {
-    //   console.log(claim);
-    // })
-
     for (var claimValues of Object.values(claims)) {
       for (var claim of claimValues) {
         if (claim.mainsnak.datatype === "wikibase-item") {
