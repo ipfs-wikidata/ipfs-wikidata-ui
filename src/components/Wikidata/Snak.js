@@ -33,7 +33,7 @@ class Snak extends React.Component {
           break;
         case "wikibase-item":
           return (
-            <WikibaseItemSnak snak={this.props.snak} entities={this.props.entities} />
+            <WikibaseItemSnak snak={this.props.snak} entities={this.props.entities} entity_fetch_states={this.props.entity_fetch_states} />
           );
           break;
         default:
@@ -50,6 +50,7 @@ Snak.propTypes = {
   snak: React.PropTypes.object.isRequired,
 
   entities: React.PropTypes.object.isRequired,
+  entity_fetch_states: React.PropTypes.object.isRequired,
 }
 
 export default Snak

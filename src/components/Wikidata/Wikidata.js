@@ -3,6 +3,7 @@ import React from 'react'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 import LinearProgress from 'material-ui/LinearProgress';
+import TextField from 'material-ui/TextField';
 
 import classes from './Wikidata.scss'
 
@@ -10,6 +11,14 @@ import Header from '../Header/Header'
 import Claims from './Claims'
 
 export class Wikidata extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      text_field_value: 'Q42',
+    };
+  }
+
   componentWillReceiveProps(nextProps) {
     if (nextProps.current !== this.props.current) {
       for (var unfetched of nextProps.unfetched_entities) {
@@ -17,6 +26,18 @@ export class Wikidata extends React.Component {
       }
     }
   }
+
+  handleChange = (event) => {
+    this.setState({
+      text_field_value: event.target.value,
+    });
+  };
+
+  handleOnKeyDown = (event) => {
+    if (event.keyCode === 13) { // Enter keypress
+      this.props.fetchCurrent(this.state.text_field_value, this.props.settings.ipfs_gateway, this.props.settings.root_hash);
+    }
+  };
 
   render() {
     return (
@@ -49,6 +70,12 @@ export class Wikidata extends React.Component {
         <button className='btn btn-default' onClick={this.props.fetchCurrent.bind(this, 'Q43', this.props.settings.ipfs_gateway, this.props.settings.root_hash)}>
           Turkey
         </button>
+        <TextField
+          id="entity_id_field"
+          value={this.state.text_field_value}
+          onChange={this.handleChange}
+          onKeyDown={this.handleOnKeyDown}
+        />
         <Card>
           <CardTitle title={(this.props.entities[this.props.current] || { label: "-"} ).label + " - " + (this.props.entities[this.props.current] || { label: "-"} ).description} subtitle={"Item - " + (this.props.current || "?")} />
           <CardText>

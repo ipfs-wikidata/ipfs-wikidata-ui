@@ -199,7 +199,8 @@ export const actions = {
 // ------------------------------------
 const ACTION_HANDLERS = {
   [REQUEST_CURRENT]: (state) => {
-    return ({ ...state, fetching: true })
+
+    return ({ ...state, entities: {}, entity_fetch_states: {}, fetching: true })
   },
   [RECEIVE_CURRENT]: (state, action) => {
     let received_entity = action.payload.json;
